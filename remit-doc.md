@@ -1,5 +1,13 @@
 # Pouch Remit API
 
+### Table of Contents
+- [Authentication](#authentication)
+- [Test Data](#test-data-todo)
+- [Errors](#errors)
+- [Payment Methods](#payment-methods-todo)
+- [Invoices](#invoices)
+- [Webhooks](#webhooks)
+
 ## Authentication
 Authentication is required to access any endpoint. You need the API Key in the `X-Pouch-Api-Key` header. An additional `X-Pouch-Signature` header with a signature generated using a HMAC with SHA256, a secret key and a concatenated request body is required for some endpoints.
 
@@ -282,7 +290,7 @@ Pouch will generate a signature using HMAC with SHA256 and assign it to the `X-P
 |Type|Description
 |-|-|
 |`invoice.paid`|triggers when the invoice status transitions to `completed`|
-|`invoice.failed`|triggers when the invoice status transitions `failed`|
+|`invoice.failed`|triggers when the invoice status transitions to `failed`|
 
 To verify the signature:
 1. You need to extract the `X-Pouch-Signature` in the header upon receiving the request
