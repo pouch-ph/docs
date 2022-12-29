@@ -75,8 +75,30 @@ Examples:
 }
 ```
 
-## Payment Methods (TODO)
+## Payment Methods
 ### GET /v1/paymentMethods
+- Fetches and returns list of banks that uses instapay as settlement
+
+Headers
+```
+X-Pouch-Api-Key: apiKey
+Content-Type: application/json
+```
+Response
+```js
+{
+  "data": [
+    {
+      "code": "APHIPHM2XXX",
+      "name": "Alipay / Lazada Wallet"
+    },
+    {
+      "code": "AUBKPHMMXXX",
+      "name": "ASIA UNITED BANK"
+    }
+  ]
+}
+```
 
 ## Invoices
 A resource that you use to initiate a remittance to a target payment method. It's composed of states that you can use to track the progress from initalization until completion.
