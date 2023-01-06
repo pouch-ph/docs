@@ -4,6 +4,7 @@
 - [Authentication](#authentication)
 - [Test Data](#test-data)
 - [Errors](#errors)
+- [Environments](#environments)
 - [Payment Methods](#payment-methods)
 - [Invoices](#invoices)
 - [Webhooks](#webhooks)
@@ -113,6 +114,11 @@ Examples:
   }
 }
 ```
+## Environments
+|Environment|URL|
+|-|-|
+|Sandbox|https://pouch-remit-sandbox.herokuapp.com|
+|Production|Please contact **hello@pouch.ph**|
 
 ## Payment Methods
 ### GET /v1/paymentMethods
