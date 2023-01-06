@@ -4,7 +4,7 @@
 - [Authentication](#authentication)
 - [Test Data](#test-data-todo)
 - [Errors](#errors)
-- [Payment Methods](#payment-methods-todo)
+- [Payment Methods](#payment-methods)
 - [Invoices](#invoices)
 - [Webhooks](#webhooks)
 
@@ -27,6 +27,7 @@ Please contact **hello@pouch.ph** to get started.
 |401|Unauthorized|Invalid authentication|
 |403|Forbidden|Invalid permission to perform the request|
 |404|NotFound|The resource does not exist|
+|422|Unprocessable|Unable to process the request|
 |500|InternalServerError|An internal Pouch error has occured|
 
 ### Error Messages
@@ -39,6 +40,8 @@ Please contact **hello@pouch.ph** to get started.
 401|Unauthorized|Signature is invalid|
 403|Unauthorized|Invalid Access|
 404|NotFound|Invoice not found|
+422|Unprocessable|Payment method is invalid|
+422|Unprocessable|Transfer amount not in range|
 500|InternalServerError|(.*)|
 ### Error Responses
 Examples:
@@ -50,6 +53,18 @@ Examples:
     "message": "Validation failed for schema createInvoice",
     "details": [
       "description is a required field"
+    ]
+  }
+}
+```
+```js
+// 400 Bad Request
+{
+  "error": {
+    "code": "BadRequest",
+    "message": "Validation failed for schema createInvoice",
+    "details": [
+      "recipient.mobileNumber is invalid"
     ]
   }
 }
@@ -74,10 +89,31 @@ Examples:
   }
 }
 ```
+```js
+// 422 Unprocessable
+{
+  "error": {
+    "code": "Unprocessable",
+    "message": "Payment Method is invalid",
+    "details": []
+  }
+}
+```
+```js
+// 500 InternalServerError
+{
+  "error": {
+    "code": "NotFound",
+    "message": "Failed fetching exchange rates",
+    "details": []
+  }
+}
+```
 
 ## Payment Methods
 ### GET /v1/paymentMethods
-- Fetches and returns list of banks that uses instapay as settlement
+- Fetches list of payment methods categorized by type (i.e. mobileMoney, bank)
+- The properties in the `fields` per type are required to be passed in the `recipient` object when creating an invoice
 
 Headers
 ```
@@ -87,16 +123,56 @@ Content-Type: application/json
 Response
 ```js
 {
-  "data": [
-    {
-      "code": "APHIPHM2XXX",
-      "name": "Alipay / Lazada Wallet"
+  "data": {
+    "results": {
+      "mobileMoney": [
+        {
+          "code": "GXCHPHM2XXX",
+          "name": "G-Xchange / GCash"
+        },
+        {
+          "code": "PAPHPHM1XXX",
+          "name": "PayMaya Philippines Inc"
+        }
+      ],
+      "bank": [
+        {
+          "code": "APHIPHM2XXX",
+          "name": "Alipay / Lazada Wallet"
+        },
+        {
+          "code": "AUBKPHMMXXX",
+          "name": "ASIA UNITED BANK"
+        }
+      ]
     },
-    {
-      "code": "AUBKPHMMXXX",
-      "name": "ASIA UNITED BANK"
+    "fields": {
+      "mobileMoney": [
+        {
+          "label": "Full Name",
+          "type": "String",
+          "key": "name"
+        },
+        {
+          "label": "Mobile Number",
+          "type": "String",
+          "key": "mobileNumber"
+        }
+      ],
+      "bank": [
+        {
+          "label": "Full Name",
+          "type": "String",
+          "key": "name"
+        },
+        {
+          "label": "Account Number",
+          "type": "String",
+          "key": "accountNumber"
+        }
+      ]
     }
-  ]
+  }
 }
 ```
 
@@ -126,8 +202,11 @@ stateDiagram
 
 
 ### POST /v1/invoices
-- Creates an invoice that expires within `60` seconds
+- Creates an invoice that expires within `120` seconds
 - Guarantees the exchange rate upon creating an invoice
+- The `description` field will be used as `memo` in the invoice
+- There's a min/max limit of `PHP1.00`/`PHP50,000.00` per transaction (computed from SAT -> PHP)
+
 
 Headers
 ```
@@ -143,7 +222,7 @@ Request
   "description": "test description",
   "paymentMethodCode": "MYDBPHM2XXX",
   "currency": "SAT",
-  "amount": "10000",
+  "amount": 10000,
   "recipient": {
     "name": "Netbank (A Rural Bank), Inc.",
     "accountNumber": "199000000040"
@@ -159,7 +238,10 @@ Request
 |`currency`|`string`|`SAT`|`-`|`Y`
 |`amount`|`integer`|`integer`|`-`|`Y`
 |`recipient..name`|`string`|`any`|`1-64 char`|`Y`
-|`recipient..accountNumber`|`string`|`any`|`1-64 char`|`Y`
+|`recipient..accountNumber`|`string`|`integer`|`1-64 char`|`Conditional`
+|`recipient..mobileNumber`|`string`|`msisdn`|`-`|`Conditional`
+
+- A paymentMethodCode that belongs to a mobileMoney type is required to provide `recipient..mobileNumber`. For bank type, `recipient..accountNumber` is required.
 
 To compute for the signature:
 ```js
@@ -181,6 +263,7 @@ const sign = (body, secret) => {
 }
 // hash: 888bb3c0b398422bcda0f612857f7da7fa5c70ca390c0b20c7853214dc06866
 ```
+- Depending on the type, you need to sign using accountNumber or mobileNumber
 
 Response
 ```js
@@ -249,7 +332,7 @@ GET /v1/invoices/4a9d7d95-4fdf-4ad7-a7f2-ae2ea1e426bd
 
 |Property|Type|Format|Min-Max|Required
 |-|-|-|-|-|
-|referenceId|string|`uuid`|32 char|Y
+|`referenceId`|`string`|`uuid`|`32 char`|`Y`
 
 Response
 ```js
@@ -344,6 +427,7 @@ const verify = (headers, body, secret) => {
 }
 // true
 ```
+- Sign with accountNumber or mobileNumber accordingly
 
 ### Event Payload
 
