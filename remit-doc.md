@@ -10,7 +10,7 @@
 - [Webhooks](#webhooks)
 
 ## Authentication
-Authentication is required to access any endpoint. You need the API Key in the `X-Pouch-Api-Key` header. An additional `X-Pouch-Signature` header with a signature generated using a HMAC with SHA256, a secret key and a concatenated request body is required for some endpoints.
+Authentication is required to access any endpoint. You need the API Key in the `X-Pouch-Api-Key` header. An additional `X-Pouch-Signature` header with a signature generated using a HMAC with SHA256, a secret key and a request body is required for some endpoints.
 
 Please contact **hello@pouch.ph** to get started.
 
@@ -256,20 +256,16 @@ Request
 To compute for the signature:
 ```js
 // nodejs
-const crypto = require('crypto')
+const crypto = require('crypto-js')
 
 const sign = (body, secret) => {
-  const message = body.referenceId + 
-    body.description + 
-    body.paymentMethodCode + 
-    body.currency + 
-    body.amount + 
-    body.recipient.name + 
-    body.recipient.accountNumber
 
-  const hmac = crypto.createHmac('sha256', secret)
-  hmac.update(message)
-  return hmac.digest('hex')
+  const secret = pm.variables.get('secret')
+  
+  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
+  hmac.update(body)
+  const hash = crypto.enc.Hex.stringify(hmac.finalize())
+  
 }
 // hash: 888bb3c0b398422bcda0f612857f7da7fa5c70ca390c0b20c7853214dc06866
 ```
@@ -414,26 +410,18 @@ To verify the signature:
 
 ```js
 // nodejs
-const crypto = require('crypto')
+const crypto = require('crypto-js')
 
 const verify = (headers, body, secret) => {
   const signature = headers['X-Pouch-Signature']
-  const message = 
-    body.referenceId +
-    body.status +
-    body.bolt11 + 
-    body.senderDetails.amount +
-    body.senderDetails.currency +
-    body.recipientDetails.name + 
-    body.recipientDetails.accountNumber + 
-    body.recipientDetails.amount + 
-    body.recipientDetails.currency + 
-    body.fees.partnerFee.amount + 
-    body.fees.partnerFee.currency 
 
-  const hmac = crypto.createHmac('sha256', secret)
-  hmac.update(message)
-  return hmac.digest('hex') === signature
+
+  const secret = pm.variables.get('secret')
+  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
+  hmac.update(body)
+  const hash = crypto.enc.Hex.stringify(hmac.finalize())
+
+  return hash === signature
 }
 // true
 ```
@@ -529,13 +517,12 @@ Request
 To compute for the signature:
 ```js
 // nodejs
-const crypto = require('crypto')
+const crypto = require('crypto-js')
 
 const sign = (body, secret) => {
-  const message = body.event + body.url
-  const hmac = crypto.createHmac('sha256', secret)
-  hmac.update(message)
-  return hmac.digest('hex')
+  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
+  hmac.update(body)
+  const hash = crypto.enc.Hex.stringify(hmac.finalize())
 }
 // hash: 6d87c3d2360e8f6fafe7379ce21706eb9200009f646851d4eaa3202dd3d3be30
 ```
