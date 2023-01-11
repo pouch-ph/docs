@@ -256,20 +256,14 @@ Request
 To compute for the signature:
 ```js
 // nodejs
-const crypto = require('crypto-js')
+const crypto = require('crypto')
 
 const sign = (body, secret) => {
-
-  const secret = pm.variables.get('secret')
-  
-  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
-  hmac.update(body)
-  const hash = crypto.enc.Hex.stringify(hmac.finalize())
-  
+  const hmac = crypto.createHmac('sha256', secret)
+  return hmac.update(JSON.stringify(body)).digest('hex')
 }
 // hash: 888bb3c0b398422bcda0f612857f7da7fa5c70ca390c0b20c7853214dc06866
 ```
-- Depending on the type, you need to sign using accountNumber or mobileNumber
 
 Response
 ```js
@@ -415,17 +409,13 @@ const crypto = require('crypto-js')
 const verify = (headers, body, secret) => {
   const signature = headers['X-Pouch-Signature']
 
-
-  const secret = pm.variables.get('secret')
-  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
-  hmac.update(body)
-  const hash = crypto.enc.Hex.stringify(hmac.finalize())
-
+  const hmac = crypto.createHmac('sha256', secret)
+  const hash = hmac.update(JSON.stringify(body)).digest('hex')
+  
   return hash === signature
 }
 // true
 ```
-- Sign with accountNumber or mobileNumber accordingly
 
 ### Event Payload
 
@@ -517,12 +507,11 @@ Request
 To compute for the signature:
 ```js
 // nodejs
-const crypto = require('crypto-js')
+const crypto = require('crypto')
 
 const sign = (body, secret) => {
-  const hmac = crypto.algo.HMAC.create(crypto.algo.SHA256, secret)
-  hmac.update(body)
-  const hash = crypto.enc.Hex.stringify(hmac.finalize())
+  const hmac = crypto.createHmac('sha256', secret)
+  return hmac.update(JSON.stringify(body)).digest('hex')
 }
 // hash: 6d87c3d2360e8f6fafe7379ce21706eb9200009f646851d4eaa3202dd3d3be30
 ```
