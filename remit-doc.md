@@ -404,7 +404,7 @@ To verify the signature:
 
 ```js
 // nodejs
-const crypto = require('crypto-js')
+const crypto = require('crypto')
 
 const verify = (headers, body, secret) => {
   const signature = headers['X-Pouch-Signature']
