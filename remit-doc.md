@@ -243,7 +243,7 @@ Request
   "currency": "SAT",
   "amount": 10000,
   "recipient": {
-    "name": "Netbank (A Rural Bank), Inc.",
+    "name": "Jerry Smith",
     "accountNumber": "199000000040"
   }
 }
