@@ -224,7 +224,7 @@ stateDiagram
 - Creates an invoice that expires within `120` seconds
 - Guarantees the exchange rate upon creating an invoice
 - The `description` field will be used as `memo` in the invoice
-- There's a min/max limit of `PHP1.00`/`PHP50,000.00` per transaction (computed from SAT -> PHP)
+- There's a min/max limit of `PHP50.00`/`PHP50,000.00` per transaction (computed from SAT -> PHP)
 
 
 Headers
