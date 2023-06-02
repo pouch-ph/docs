@@ -87,7 +87,7 @@ Countries
 |`GET`|`/countries`|get country details|[navigate](#countries)
 
 ### Recipients
-A resource that contains details of the receiving person their bank information
+A resource that contains details of the receiving person and their bank information
 - The recipient id returned is required to create a payout ([see here](#create-payout))
 - There's a `$20` fee for `US_DOMESTIC_WIRE` and `$0` fee for `ACH`
 - Ideally, the recipient id should be saved and be used for recurring payouts
