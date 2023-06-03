@@ -112,19 +112,17 @@ Request
   "accountType": "CHECKING",
   "accountNumber": "111111111111",
   "routingNumber": "222222222",
-  "recipients": [
-    {
-      "name": "John Doe",
-      "type": "INDIVIDUAL",
-      "address": {
-        "line1": "Line1 Address",
-        "country": "US",
-        "state": "WA",
-        "city": "Richland",
-        "postCode": "99354"
-      }
+  "recipients": {
+    "name": "John Doe",
+    "type": "INDIVIDUAL",
+    "address": {
+    "line1": "Line1 Address",
+    "country": "US",
+    "state": "WA",
+    "city": "Richland",
+    "postCode": "99354"
     }
-  ]
+  }
 }
 ```
 |Property|Type|Format|Min-Max|Required|Conditions|
@@ -134,15 +132,14 @@ Request
 |`accountType`|`string`|`SAVINGS`, `CHECKING`|`-`|`Conditional`|Required if `transferType` is `ACH`
 |`accountNumber`|`string`|`integer`|`5-17 char`|`Y`|`-`
 |`routingNumber`|`string`|`integer`|`9-9 char`|`Y`|`-`
-|`recipients`|`array`|`recipient`|`1-2 recipient`|`Y`|`-`
-|`recipients..name`|`string`|`string`|`1-64 char`|`Y`|`-`
-|`recipients..type`|`string`|`INDIVIDUAL`, `COMPANY`|`-`|`Y`|`-`
-|`recipients..address`|`object`|`address`|`-`|`Conditional`|Required if `transferType` is `US_DOMESTIC_WIRE`
-|`recipients..address.line1`|`string`|`string`|`1-64 char`|`Y`|`-`
-|`recipients..address.country`|`string`|[`see countries`](#countries)|`-`|`Y`|`-`
-|`recipients..address.state`|`string`|[`see countries`](#countries)|`-`|`Y`|`-`
-|`recipients..address.city`|`string`|[`see countries`](#countries)|`1-64 char`|`Y`|`-`
-|`recipients..address.postCode`|`string`|`string`|`1-12 char`|`Y`|`-`
+|`recipient.name`|`string`|`string`|`1-64 char`|`Y`|`-`
+|`recipient.type`|`string`|`INDIVIDUAL`, `COMPANY`|`-`|`Y`|`-`
+|`recipient.address`|`object`|`address`|`-`|`Conditional`|Required if `transferType` is `US_DOMESTIC_WIRE`
+|`recipient.address.line1`|`string`|`string`|`1-64 char`|`Y`|`-`
+|`recipient.address.country`|`string`|[`see countries`](#countries)|`-`|`Y`|`-`
+|`recipient.address.state`|`string`|[`see countries`](#countries)|`-`|`Y`|`-`
+|`recipient.address.city`|`string`|[`see countries`](#countries)|`1-64 char`|`Y`|`-`
+|`recipient.address.postCode`|`string`|`string`|`1-12 char`|`Y`|`-`
 
 Response
 ```js
@@ -155,19 +152,16 @@ Response
     "accountNumber": "111111111111",
     "accountType": "CHECKING",
     "routingNumber": "222222222",
-    "recipients": [
-      {
-        "name": "John Doe",
-        "type": "INDIVIDUAL",
-        "address": {
-          "line1": "Line1 Address",
-          "country": "US",
-          "state": "WA",
-          "city": "Richland",
-          "postCode": "99354"
-        }
-      }
-    ],
+    "recipients": {
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
+      "address": {
+      "line1": "Line1 Address",
+      "country": "US",
+      "state": "WA",
+      "city": "Richland",
+      "postCode": "99354"
+    },
     "createdAt": "2023-06-02T06:19:15.709Z",
     "updatedAt": "2023-06-02T06:19:15.709Z"
   }
@@ -198,19 +192,17 @@ Response
     "accountNumber": "111111111111",
     "accountType": "CHECKING",
     "routingNumber": "222222222",
-    "recipients": [
-      {
-        "name": "John Doe",
-        "type": "INDIVIDUAL",
-        "address": {
-          "line1": "Line1 Address",
-          "country": "US",
-          "state": "WA",
-          "city": "Richland",
-          "postCode": "99354"
-        }
+    "recipients": {
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
       }
-    ],
+    },
     "createdAt": "2023-06-02T06:19:15.709Z",
     "updatedAt": "2023-06-02T06:19:15.709Z"
   }
@@ -262,19 +254,17 @@ Response
       "accountNumber": "111111111111",
       "accountType": "CHECKING",
       "routingNumber": "222222222",
-      "recipients": [
-        {
-          "name": "John Doe",
-          "type": "INDIVIDUAL",
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          }
+      "recipients": {
+        "name": "John Doe",
+        "type": "INDIVIDUAL",
+        "address": {
+          "line1": "Line1 Address",
+          "country": "US",
+          "state": "WA",
+          "city": "Richland",
+          "postCode": "99354"
         }
-      ],
+      },
       "createdAt": "2023-06-02T06:19:15.709Z",
       "updatedAt": "2023-06-02T06:19:15.709Z"
     }
@@ -524,19 +514,15 @@ Response
       "name": "Jerry Smith"
     },
     "recipient": {
-      "recipients": [
-        {
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          },
-          "name": "John Doe",
-          "type": "INDIVIDUAL"
-        }
-      ],
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
+      },
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
       "id": "c0a4153c-40fd-4f58-8863-98289775e799",
       "transferType": "ACH",
       "routingNumber": "222222222",
@@ -591,19 +577,15 @@ Response
       "name": "Jerry Smith"
     },
     "recipient": {
-      "recipients": [
-        {
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          },
-          "name": "John Doe",
-          "type": "INDIVIDUAL"
-        }
-      ],
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
+      },
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
       "id": "c0a4153c-40fd-4f58-8863-98289775e799",
       "transferType": "ACH",
       "routingNumber": "222222222",
@@ -657,19 +639,15 @@ Response
       "name": "Jerry Smith"
     },
     "recipient": {
-      "recipients": [
-        {
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          },
-          "name": "John Doe",
-          "type": "INDIVIDUAL"
-        }
-      ],
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
+      },
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
       "id": "c0a4153c-40fd-4f58-8863-98289775e799",
       "transferType": "ACH",
       "routingNumber": "222222222",
@@ -723,19 +701,15 @@ Response
       "name": "Jerry Smith"
     },
     "recipient": {
-      "recipients": [
-        {
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          },
-          "name": "John Doe",
-          "type": "INDIVIDUAL"
-        }
-      ],
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
+      },
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
       "id": "c0a4153c-40fd-4f58-8863-98289775e799",
       "transferType": "ACH",
       "routingNumber": "222222222",
@@ -800,19 +774,15 @@ Request
       "name": "Jerry Smith"
     },
     "recipient": {
-      "recipients": [
-        {
-          "address": {
-            "line1": "Line1 Address",
-            "country": "US",
-            "state": "WA",
-            "city": "Richland",
-            "postCode": "99354"
-          },
-          "name": "John Doe",
-          "type": "INDIVIDUAL"
-        }
-      ],
+      "address": {
+        "line1": "Line1 Address",
+        "country": "US",
+        "state": "WA",
+        "city": "Richland",
+        "postCode": "99354"
+      },
+      "name": "John Doe",
+      "type": "INDIVIDUAL",
       "id": "c0a4153c-40fd-4f58-8863-98289775e799",
       "transferType": "ACH",
       "routingNumber": "222222222",
