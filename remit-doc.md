@@ -8,6 +8,7 @@
 - [Payment Methods](#payment-methods)
 - [Invoices](#invoices)
 - [Webhooks](#webhooks)
+- [Rates](#rates)
 
 ## Authentication
 Authentication is required to access any endpoint. You need the API Key in the `X-Pouch-Api-Key` header. An additional `X-Pouch-Signature` header with a signature generated using a HMAC with SHA256, a secret key and a request body is required for some endpoints.
@@ -664,5 +665,50 @@ Response
       "updatedAt": "2022-12-27T16:43:26.777Z"
     }
   ]
+}
+```
+
+## Rates
+The figures used to show conversion estimates
+
+### Get Rates
+- Retrieves latest rates
+
+```java
+X-Pouch-Api-Key: apiKey
+```
+
+Request
+```js
+GET /v1/rates
+```
+
+
+Response
+```js
+// 200 OK
+{
+  "data": {
+    "btc": {
+      "value": 1,
+      "php": 1497275.7021,
+      "usd": 26722.1191
+    },
+    "sat": {
+      "value": 1,
+      "php": 0.0149,
+      "usd": 0.0002
+    },
+    "php": {
+      "value": 1,
+      "sat": 66.7879,
+      "usd": 0.0178
+    },
+    "usd": {
+      "value": 1,
+      "sat": 3742.2181,
+      "php": 56.0313
+    }
+  }
 }
 ```
