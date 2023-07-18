@@ -125,8 +125,8 @@ For Sandbox & Production URLs, please contact **hello@pouch.ph**
 ## Payment Methods
 ### GET /v1/paymentMethods
 - Fetches list of payment methods categorized by type (i.e. mobileMoney, bank)
+- Each payment methods has a list of supported rails (i.e. instapay, pesonet, direct) which may change depending on availability
 - The properties in the `fields` per type are required to be passed in the `recipient` object when creating an invoice
-
 Headers
 ```
 X-Pouch-Api-Key: apiKey
@@ -139,22 +139,36 @@ Response
     "results": {
       "mobileMoney": [
         {
-          "code": "GXCHPHM2XXX",
-          "name": "G-Xchange / GCash"
+          "code": "POUCHPH",
+          "name": "Pouch.ph Wallet",
+          "methods": [
+            "direct"
+          ]
         },
         {
-          "code": "PAPHPHM1XXX",
-          "name": "PayMaya Philippines Inc"
+          "code": "57",
+          "name": "PayMaya",
+          "methods": [
+            "instapay",
+            "pesonet"
+          ]
         }
       ],
       "bank": [
         {
-          "code": "APHIPHM2XXX",
-          "name": "Alipay / Lazada Wallet"
+          "code": "39",
+          "name": "United Overseas Bank Phils (UOB)",
+          "methods": [
+            "pesonet"
+          ]
         },
         {
-          "code": "AUBKPHMMXXX",
-          "name": "ASIA UNITED BANK"
+          "code": "27",
+          "name": "Maybank PhilsInc",
+          "methods": [
+            "instapay",
+            "pesonet"
+          ]
         }
       ]
     },
@@ -240,7 +254,8 @@ Request
 {
   "referenceId": "4a9d7d95-4fdf-4ad7-a7f2-ae2ea1e426bd",
   "description": "test description",
-  "paymentMethodCode": "MYDBPHM2XXX",
+  "paymentMethodCode": "57",
+  "paymentMethodRail": "instapay",
   "currency": "SAT",
   "amount": 10000,
   "recipient": {
@@ -255,13 +270,18 @@ Request
 |`referenceId`|`string`|`uuid4`|`32 char`|`Y`
 |`description`|`string`|`any`|`1-64 char`|`Y`
 |`paymentMethodCode`|`string`|`any`|`1-64 char`|`Y`
+|`paymentMethodRail`|`string`|`instapay`,`pesonet`,`direct`|`-`|`-`
 |`currency`|`string`|`SAT`|`-`|`Y`
 |`amount`|`integer`|`integer`|`-`|`Y`
 |`recipient..name`|`string`|`any`|`1-64 char`|`Y`
 |`recipient..accountNumber`|`string`|`integer`|`1-64 char`|`Conditional`
 |`recipient..mobileNumber`|`string`|`msisdn`|`-`|`Conditional`
 
-- A paymentMethodCode that belongs to a mobileMoney type is required to provide `recipient..mobileNumber`. For bank type, `recipient..accountNumber` is required.
+- If the paymentMethodCode type is mobileMoney then `recipient..mobileNumber` is required. For bank type, `recipient..accountNumber` is required.
+- paymentMethodRail determines what method to use to transfer funds (currently optional and defaults to `instapay`)
+  - `instapay` offers instant transfers with a limit of PHP 50 to 50,000. 
+  - `pesonet` may take 1 to 2 days for transfers and has a limit of PHP 50,000 to PHP 500,000. 
+  - `direct` transfers are instant with a limit of PHP 50 to PHP 500,000. (this method is exclusively available for pouch wallets)
 
 To compute for the signature:
 ```js
@@ -289,7 +309,7 @@ Response
       "currency": "SAT"
     },
     "recipientDetails": {
-      "name": "Netbank (A Rural Bank), Inc.",
+      "name": "Jerri Smith",
       "accountNumber": "199000000040",
       "amount": 92,
       "currency": "PHP"
@@ -357,7 +377,7 @@ Response
       "currency": "SAT"
     },
     "recipientDetails": {
-      "name": "Netbank (A Rural Bank), Inc.",
+      "name": "Jerry Smith",
       "accountNumber": "199000000040",
       "amount": 92,
       "currency": "PHP"
@@ -451,7 +471,7 @@ Response
       "currency": "SAT"
     },
     "recipientDetails": {
-      "name": "Netbank (A Rural Bank), Inc.",
+      "name": "Jerry Smith",
       "accountNumber": "199000000040",
       "amount": 92,
       "currency": "PHP"
@@ -542,7 +562,7 @@ Request
       "currency": "SAT"
     },
     "recipientDetails": {
-      "name": "Netbank (A Rural Bank), Inc.",
+      "name": "Jerry Smith",
       "accountNumber": "199000000040",
       "amount": 92,
       "currency": "PHP"
