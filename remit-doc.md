@@ -276,7 +276,6 @@ Request
   "referenceId": "4a9d7d95-4fdf-4ad7-a7f2-ae2ea1e426bd",
   "description": "test description",
   "paymentMethodCode": "57",
-  "paymentMethodRail": "instapay",
   "currency": "SAT",
   "amount": 10000,
   "recipient": {
@@ -291,7 +290,6 @@ Request
 |`referenceId`|`string`|`uuid4`|`32 char`|`Y`
 |`description`|`string`|`any`|`1-64 char`|`Y`
 |`paymentMethodCode`|`string`|`any`|`1-64 char`|`Y`
-|`paymentMethodRail`|`string`|`instapay`,`pesonet`,`direct`|`-`|`-`
 |`currency`|`string`|`SAT`|`-`|`Y`
 |`amount`|`integer`|`integer`|`-`|`Y`
 |`recipient..name`|`string`|`any`|`1-64 char`|`Y`
@@ -299,10 +297,6 @@ Request
 |`recipient..mobileNumber`|`string`|`msisdn`|`-`|`Conditional`
 
 - If the paymentMethodCode type is mobileMoney then `recipient..mobileNumber` is required. For bank type, `recipient..accountNumber` is required.
-- paymentMethodRail determines what method to use to transfer funds (currently optional and defaults to `instapay`)
-  - `instapay` offers instant transfers with a limit of PHP 50 to 50,000. 
-  - `pesonet` may take 1 to 2 days for transfers and has a limit of PHP 50,000 to PHP 500,000. 
-  - `direct` transfers are instant with a limit of PHP 50 to PHP 500,000. (this method is exclusively available for pouch wallets)
 
 To compute for the signature:
 ```js
