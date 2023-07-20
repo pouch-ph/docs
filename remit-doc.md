@@ -125,8 +125,9 @@ For Sandbox & Production URLs, please contact **hello@pouch.ph**
 ## Payment Methods
 ### GET /v1/paymentMethods
 - Fetches list of payment methods categorized by type (i.e. mobileMoney, bank)
-- Each payment methods has a list of supported rails (i.e. instapay, pesonet, direct) which may change depending on availability
 - The properties in the `fields` per type are required to be passed in the `recipient` object when creating an invoice
+- Limits are used to indicate the settlement time to the receiving bank. The settlement time depends on where the amount will fall within a range. 0 means instant, while 1 means 1 business day.
+
 Headers
 ```
 X-Pouch-Api-Key: apiKey
@@ -141,16 +142,26 @@ Response
         {
           "code": "POUCHPH",
           "name": "Pouch.ph Wallet",
-          "methods": [
-            "direct"
-          ]
+          "limits": [{
+              "min": 50,
+              "max": 500000,
+              "settlementTime": 0
+          }],
         },
         {
           "code": "57",
           "name": "PayMaya",
-          "methods": [
-            "instapay",
-            "pesonet"
+          "limits": [
+            {
+              "min": 50,
+              "max": 50000,
+              "settlementTime": 0
+            },
+            {
+              "min": 50000.01,
+              "max": 500000,
+              "settlementTime": 1
+            }
           ]
         }
       ],
@@ -158,16 +169,28 @@ Response
         {
           "code": "39",
           "name": "United Overseas Bank Phils (UOB)",
-          "methods": [
-            "pesonet"
+          "limits": [
+            {
+              "min": 50,
+              "max": 500000,
+              "settlementTime": 1
+            }
           ]
         },
         {
           "code": "27",
           "name": "Maybank PhilsInc",
-          "methods": [
-            "instapay",
-            "pesonet"
+          "limits": [
+            {
+              "min": 50,
+              "max": 50000,
+              "settlementTime": 0
+            },
+            {
+              "min": 50000.01,
+              "max": 500000,
+              "settlementTime": 1
+            }
           ]
         }
       ]
