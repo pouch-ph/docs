@@ -40,6 +40,8 @@ GET /api/v3/notifications
 ```
 GET /api/v3/notifications/count
 ```
+This will be used in the wallet screen to show if there are unread notifications. This will be mainly used for submitting on-chain deposit form.
+
 **Sample Response**
 ```
 {
@@ -55,4 +57,8 @@ GET /api/v3/notifications/count
 
 ![image](https://github.com/pouch-ph/docs/assets/31103697/16d390a1-f1b0-4634-85e6-b77b03b99fa2)
 
+## Sample Mockup
+|Wallet Screen|Notifications Screen|
+|-|-|
+|![image](https://github.com/pouch-ph/docs/assets/31103697/6509e4a5-9e72-44e3-b1ee-6ad20255b0d7)|![image](https://github.com/pouch-ph/docs/assets/31103697/2ab3ba17-b528-4827-b4bd-af3e2965d409)|
 
